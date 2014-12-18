@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Login : MonoBehaviour
 {
+	public static InputField Username;
+
     // Use this for initialization
     void Start()
     {
@@ -15,4 +18,16 @@ public class Login : MonoBehaviour
     {
 
     }
+
+	public void ClickLogin()
+	{
+		SendLoginInfo();
+	}
+
+	public static void SendLoginInfo()
+	{
+		Connection.sendMessage(Messages.LOGIN);
+		//Debug.Log(Username.text);
+		//Connection.sendMessage(Messages.LOGIN, Username.text);
+	}
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System;
+using System.Linq;
 
 public class Connection : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class Connection : MonoBehaviour
 		clientSocket.Connect(SERVER_IP, SERVER_PORT);
 	}
 
-	public static void OnReceiveServerMessage(int message, params string[] parameters)
+	public static void OnReceiveServerMessage(int message, params object[] parameters)
 	{
 		switch(message)
 		{
@@ -39,7 +40,7 @@ public class Connection : MonoBehaviour
 		}
 	}
 
-	public static void sendMessage(int message, params string[] parameters)
+	public static void sendMessage(int message, params object[] parameters)
 	{
 		if (clientSocket.Connected)
 		{
@@ -47,7 +48,7 @@ public class Connection : MonoBehaviour
 			{
 				NetworkStream serverStream = clientSocket.GetStream();
 				
-				string sendingMessage = message + ";" + String.Join(";", parameters);
+				string sendingMessage = message + ";" + String.Join(";", (from o in parameters select o.ToString()).ToArray());
 				
 				byte[] outStream = System.Text.Encoding.ASCII.GetBytes(sendingMessage + "$");
 				serverStream.Write(outStream, 0, outStream.Length);
