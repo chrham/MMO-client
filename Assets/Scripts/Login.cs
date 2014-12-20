@@ -4,30 +4,19 @@ using System.Collections;
 
 public class Login : MonoBehaviour
 {
-	public static InputField Username;
+	public InputField username;
+	public InputField password;
 
     // Use this for initialization
     void Start()
     {
         Debug.Log("loaded");
-		Connection.Establish();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-
+		Connection.establish();
     }
 
 	public void ClickLogin()
 	{
-		SendLoginInfo();
-	}
-
-	public static void SendLoginInfo()
-	{
-		Connection.sendMessage(Messages.LOGIN);
-		//Debug.Log(Username.text);
-		//Connection.sendMessage(Messages.LOGIN, Username.text);
+		Connection.sendMessage(Messages.LOGIN, username.text, password.text);
 	}
 }

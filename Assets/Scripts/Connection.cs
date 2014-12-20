@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System;
 using System.Linq;
+using System.Threading;
 
 public class Connection : MonoBehaviour
 {
@@ -11,12 +12,6 @@ public class Connection : MonoBehaviour
 	static int SERVER_PORT = 8888;
 
 	static TcpClient clientSocket = new System.Net.Sockets.TcpClient();
-
-	// Use this for initialization
-	void Start()
-    {
-
-	}
 	
 	// Update is called once per frame
 	void Update()
@@ -24,9 +19,12 @@ public class Connection : MonoBehaviour
 	
 	}
 
-	public static void Establish()
+	public static void establish()
 	{
 		clientSocket.Connect(SERVER_IP, SERVER_PORT);
+
+		Thread ctThread = new Thread(doChat);
+		ctThread.Start();
 	}
 
 	public static void OnReceiveServerMessage(int message, params object[] parameters)
@@ -35,6 +33,15 @@ public class Connection : MonoBehaviour
 		{
 			case Messages.LOGIN:
 			{
+				if(Convert.ToInt32(parameters[0]) == 0)
+				{
+					Debug.Log("login failed");
+				}
+				else
+				{
+					Debug.Log("login successful");
+				}
+
 				break;
 			}
 		}
@@ -53,9 +60,21 @@ public class Connection : MonoBehaviour
 				byte[] outStream = System.Text.Encoding.ASCII.GetBytes(sendingMessage + "$");
 				serverStream.Write(outStream, 0, outStream.Length);
 				serverStream.Flush();
-				
+			}
+			catch
+			{
+			}
+		}
+	}
+
+	private static void doChat()
+	{
+		while(clientSocket.Connected)
+		{
+			try
+			{
 				byte[] inStream = new byte[505196];
-				serverStream.Read(inStream, 0, clientSocket.ReceiveBufferSize);
+				clientSocket.GetStream().Read(inStream, 0, clientSocket.ReceiveBufferSize);
 				
 				List<string> receivedMessage = new List<string>(System.Text.Encoding.ASCII.GetString(inStream).Split(';'));
 				int messageID = Convert.ToInt32(receivedMessage[0]);
@@ -64,9 +83,12 @@ public class Connection : MonoBehaviour
 				
 				OnReceiveServerMessage(messageID, receivedMessage.ToArray());
 			}
-			catch
-			{
-			}
+			catch { }
 		}
+	}
+
+	public void OnApplicationQuit()
+	{
+		clientSocket.Close();
 	}
 }
