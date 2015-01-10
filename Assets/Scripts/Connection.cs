@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System;
 using System.Linq;
 using System.Threading;
+using UnityEditor;
 
 public class Connection : MonoBehaviour
 {
@@ -12,19 +13,12 @@ public class Connection : MonoBehaviour
 	static int SERVER_PORT = 8888;
 
 	static TcpClient clientSocket = new System.Net.Sockets.TcpClient();
-	
-	// Update is called once per frame
-	void Update()
-    {
-	
-	}
+
+	public static string characterList;
 
 	public static void establish()
 	{
 		clientSocket.Connect(SERVER_IP, SERVER_PORT);
-
-		Thread ctThread = new Thread(doChat);
-		ctThread.Start();
 	}
 
 	public static void OnReceiveServerMessage(int message, params object[] parameters)
@@ -35,13 +29,20 @@ public class Connection : MonoBehaviour
 			{
 				if(Convert.ToInt32(parameters[0]) == 0)
 				{
-					Debug.Log("login failed");
+					EditorUtility.DisplayDialog("Login Failed", "Your account information was invalid. Please check it and try again.", "Close");
 				}
 				else
 				{
-					Debug.Log("login successful");
+					characterList = parameters[1].ToString();
+
+					Application.LoadLevel("CharacterSelection");
 				}
 
+				break;
+			}
+
+			case Messages.LOADCHARACTER:
+			{
 				break;
 			}
 		}
@@ -54,25 +55,12 @@ public class Connection : MonoBehaviour
 			try
 			{
 				NetworkStream serverStream = clientSocket.GetStream();
-				
+
 				string sendingMessage = message + ";" + String.Join(";", (from o in parameters select o.ToString()).ToArray());
-				
 				byte[] outStream = System.Text.Encoding.ASCII.GetBytes(sendingMessage + "$");
 				serverStream.Write(outStream, 0, outStream.Length);
 				serverStream.Flush();
-			}
-			catch
-			{
-			}
-		}
-	}
 
-	private static void doChat()
-	{
-		while(clientSocket.Connected)
-		{
-			try
-			{
 				byte[] inStream = new byte[505196];
 				clientSocket.GetStream().Read(inStream, 0, clientSocket.ReceiveBufferSize);
 				
@@ -83,7 +71,9 @@ public class Connection : MonoBehaviour
 				
 				OnReceiveServerMessage(messageID, receivedMessage.ToArray());
 			}
-			catch { }
+			catch
+			{
+			}
 		}
 	}
 
