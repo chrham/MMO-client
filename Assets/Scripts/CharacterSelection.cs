@@ -15,7 +15,7 @@ public class CharacterSelection : MonoBehaviour
 
 	void OnGUI()
 	{
-		int characterIndex = 0;
+		/*int characterIndex = 0;
 		
 		characterList.ForEach(delegate(object[] character)
 		{
@@ -25,6 +25,6 @@ public class CharacterSelection : MonoBehaviour
 			}
 
 			characterIndex++;
-		});
+		});*/
 	}
 }
