@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e914bddc8647524a872dedc263b3e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  joystickName: RightJoystick
+  joystickName: 52696768744a6f79737469636b
   axes: 1
   sensitivityX: 3
   sensitivityY: .5
@@ -219,6 +219,7 @@ MonoBehaviour:
   maximumX: 360
   minimumY: 0
   maximumY: 0
+  rotationY: 0
 --- !u!1002 &11400001
 EditorExtensionImpl:
   serializedVersion: 6
@@ -241,7 +242,6 @@ MonoBehaviour:
     maxSidewaysSpeed: 6
     maxBackwardsSpeed: 6
     slopeSpeedMultiplier:
-      serializedVersion: 2
       m_Curve:
       - time: -90
         value: 1
@@ -278,6 +278,9 @@ MonoBehaviour:
     slidingSpeed: 10
     sidewaysControl: 1
     speedControl: .400000006
+  lastGroundNormal: {x: 0, y: 0, z: 0}
+  tr: {fileID: 0}
+  controller: {fileID: 0}
 --- !u!1002 &11400003
 EditorExtensionImpl:
   serializedVersion: 6
@@ -292,7 +295,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb5d4e0e1c5f1945a2d69da5a0e6d0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  joystickID: LeftJoystick
+  joystickID: 4c6566744a6f79737469636b
+  motor: {fileID: 0}
 --- !u!1002 &11400005
 EditorExtensionImpl:
   serializedVersion: 6
@@ -307,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e914bddc8647524a872dedc263b3e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  joystickName: RightJoystick
+  joystickName: 52696768744a6f79737469636b
   axes: 2
   sensitivityX: 5
   sensitivityY: 3
@@ -315,6 +319,7 @@ MonoBehaviour:
   maximumX: 360
   minimumY: -60
   maximumY: 60
+  rotationY: 0
 --- !u!1002 &11400007
 EditorExtensionImpl:
   serializedVersion: 6
